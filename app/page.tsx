@@ -95,12 +95,11 @@ function CameraRig({ focusedWork, isMobile }: { focusedWork: number | null, isMo
       }
     } else {
       // RESET POSITION: 
-      // If Mobile, go further back (z: 12) so the tree fits.
-      // If Desktop, stay closer (z: 8.5).
+      // Adjusted from 12.0 to 10.5 for better zoom on mobile
       gsap.to(camera.position, {
         x: 0,
         y: 1.5,
-        z: isMobile ? 12.0 : 8.5, 
+        z: isMobile ? 9.0 : 8.5, 
         duration: 1.5,
         ease: "power3.inOut"
       })
@@ -167,18 +166,14 @@ function WorksNodes({ isDark, setFocusedWork }: { isDark: boolean, setFocusedWor
   )
 }
 
-// --- NEW COMPONENT: Lightweight Flowing River for Mobile ---
 function MobileRiver({ isDark }: { isDark: boolean }) {
-  // Load texture
   const texture = useTexture('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/waternormals.jpg')
   
-  // Set texture to repeat endlessly
   texture.wrapS = texture.wrapT = THREE.RepeatWrapping
   texture.repeat.set(4, 4)
 
-  // Animate the texture offset to create "flow"
   useFrame((state, delta) => {
-    texture.offset.y += delta * 0.2 // Moving the texture makes it look like flow
+    texture.offset.y += delta * 0.2 
   })
 
   return (
@@ -186,9 +181,9 @@ function MobileRiver({ isDark }: { isDark: boolean }) {
       <planeGeometry args={[100, 100]} />
       <meshStandardMaterial 
         color={isDark ? "#0a1a2a" : "#1a3a4a"} 
-        normalMap={texture}   // Use texture for bumps
+        normalMap={texture}   
         normalScale={new THREE.Vector2(0.5, 0.5)}
-        roughness={0.1}       // Shiny
+        roughness={0.1}       
         metalness={0.8}
       />
     </mesh>
@@ -261,18 +256,16 @@ export default function Home() {
 
       <Canvas 
         gl={{ 
-            // FIX 1: Turn Antialias ON (we saved enough memory elsewhere)
             antialias: true, 
             powerPreference: "high-performance",
             stencil: false,
             depth: true 
         }} 
-        // FIX 2: Allow up to 1.5x resolution on mobile (crisper than 1x)
         dpr={[1, 1.5]} 
         shadows={!isMobile} 
       >
-        {/* FIX 3: Push camera back on mobile (z: 12) so tree fits */}
-        <PerspectiveCamera makeDefault position={[0, 1.5, isMobile ? 12 : 8.5]} fov={45} />
+        {/* Updated z-position for mobile to 10.5 */}
+        <PerspectiveCamera makeDefault position={[0, 1.5, isMobile ? 10.5 : 8.5]} fov={45} />
         
         <CameraRig focusedWork={focusedWork} isMobile={isMobile} />
 
@@ -304,7 +297,6 @@ export default function Home() {
         <Suspense fallback={null}>
           <Tree position={[0, -3, 0]} rotation={[0, 0.5, 0]} castShadow={!isMobile} receiveShadow={!isMobile}/>
           
-          {/* Use different water components for mobile vs desktop */}
           {isMobile ? <MobileRiver isDark={isDark} /> : <DesktopRiver isDark={isDark} />}
           
           <WorksNodes isDark={isDark} setFocusedWork={setFocusedWork} />
