@@ -2,7 +2,7 @@
 
 import * as THREE from 'three'
 import { Canvas, useFrame, extend, useThree } from '@react-three/fiber'
-import { OrbitControls, Environment, Sparkles, SpotLight, Html, Text, PerspectiveCamera, Loader } from '@react-three/drei' // <--- ADDED LOADER
+import { OrbitControls, Environment, Sparkles, SpotLight, Html, Text, PerspectiveCamera, Loader } from '@react-three/drei'
 import { EffectComposer, Bloom } from '@react-three/postprocessing' 
 import { Suspense, useRef, useMemo, useState, useEffect } from 'react'
 import { Model as Tree } from '../src/components/canvas/Tree'
@@ -61,7 +61,7 @@ const worksData = [
   },
 ]
 
-function CameraRig({ focusedWork, isDark }: { focusedWork: number | null, isDark: boolean }) {
+function CameraRig({ focusedWork }: { focusedWork: number | null }) {
   const { camera, controls } = useThree()
   
   useEffect(() => {
@@ -93,7 +93,6 @@ function CameraRig({ focusedWork, isDark }: { focusedWork: number | null, isDark
             ease: "power3.inOut"
         })
       }
-
     } else {
       gsap.to(camera.position, {
         x: 0,
@@ -132,7 +131,6 @@ function WorksNodes({ isDark, setFocusedWork }: { isDark: boolean, setFocusedWor
     <group>
       {worksData.map((work, index) => (
         <group key={index} position={new THREE.Vector3(...work.position as [number, number, number])}>
-          
           <Text
             position={[0, 0.35, 0]} 
             fontSize={0.15} 
@@ -143,16 +141,14 @@ function WorksNodes({ isDark, setFocusedWork }: { isDark: boolean, setFocusedWor
             anchorY="middle"
             font="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff"
             onClick={(e) => handleClick(e, index)}
-            onPointerOver={() => { document.body.style.cursor = 'pointer'; setHovered(index) }} 
-            onPointerOut={() => { document.body.style.cursor = 'auto'; setHovered(null) }}
           >
             {work.title}
           </Text>
 
           <mesh 
-            onPointerOver={() => { document.body.style.cursor = 'pointer'; setHovered(index) }} 
-            onPointerOut={() => { document.body.style.cursor = 'auto'; setHovered(null) }}
             onClick={(e) => handleClick(e, index)}
+            onPointerOver={() => setHovered(index)}
+            onPointerOut={() => setHovered(null)}
           >
             <sphereGeometry args={[0.25, 32, 32]} />
             <meshStandardMaterial 
@@ -162,39 +158,38 @@ function WorksNodes({ isDark, setFocusedWork }: { isDark: boolean, setFocusedWor
               toneMapped={false}
             />
           </mesh>
-
-          <Html distanceFactor={10} center pointerEvents="none">
-            <div 
-              className={`
-                transition-all duration-300 w-32 text-center
-                ${hovered === index ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
-              `}
-            >
-              <div className={`
-                backdrop-blur-md border border-white/20 px-2 py-1 rounded shadow-xl mt-4
-                ${isDark ? 'bg-black/80 text-blue-100' : 'bg-white/90 text-gray-900'}
-              `}>
-                <p className="text-xs font-bold">{work.year}</p>
-              </div>
-            </div>
-          </Html>
         </group>
       ))}
     </group>
   )
 }
 
-function FlowingRiver({ isDark }: { isDark: boolean }) {
+function FlowingRiver({ isDark, isMobile }: { isDark: boolean, isMobile: boolean }) {
   const ref = useRef<any>(null)
   
+  // IF MOBILE: Return a simple flat plane (cheap) instead of Water shader (expensive)
+  if (isMobile) {
+    return (
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -3.1, 0]}>
+        <planeGeometry args={[100, 100]} />
+        <meshStandardMaterial 
+          color={isDark ? "#0a1a2a" : "#1a3a4a"} 
+          roughness={0.1} 
+          metalness={0.8}
+        />
+      </mesh>
+    )
+  }
+
+  // IF DESKTOP: Load full Water shader
   const waterNormals = useMemo(() => new THREE.TextureLoader().load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/waternormals.jpg', (texture) => {
     texture.wrapS = texture.wrapT = THREE.RepeatWrapping
   }), [])
 
   const geom = useMemo(() => new THREE.PlaneGeometry(100, 100), [])
   const config = useMemo(() => ({
-    textureWidth: 256, // <--- REDUCED FROM 512 for Performance
-    textureHeight: 256, // <--- REDUCED FROM 512 for Performance
+    textureWidth: 256, 
+    textureHeight: 256,
     waterNormals: waterNormals,
     sunDirection: new THREE.Vector3(),
     sunColor: 0xffffff,
@@ -217,6 +212,16 @@ export default function Home() {
   const lightTarget = useRef(new THREE.Object3D())
   const [isDark, setIsDark] = useState(true)
   const [focusedWork, setFocusedWork] = useState<number | null>(null)
+  
+  // --- DETECT MOBILE ---
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    // Basic check: if screen width is less than 768px, it's mobile
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   const colors = {
     bg: isDark ? "#050510" : "#aaccff",
@@ -241,17 +246,18 @@ export default function Home() {
 
       <Canvas 
         gl={{ 
-            antialias: false, 
+            antialias: !isMobile, // Disable AA on mobile for speed
             powerPreference: "high-performance",
             stencil: false,
             depth: true 
         }} 
-        dpr={[1, 1.5]} // Caps quality at 1.5 to save mobile batteries
-        shadows={false} // <--- DISABLED SHADOWS FOR PERFORMANCE
+        // Force pixel ratio to 1 on mobile (prevents overheating/crashing)
+        dpr={isMobile ? 1 : [1, 1.5]} 
+        shadows={!isMobile} // Disable shadows entirely on mobile
       >
         <PerspectiveCamera makeDefault position={[0, 1.5, 8.5]} fov={45} />
         
-        <CameraRig focusedWork={focusedWork} isDark={isDark} />
+        <CameraRig focusedWork={focusedWork} />
 
         <color attach="background" args={[colors.bg]} />
         <fog attach="fog" args={[colors.fog, 5, 30]} />
@@ -262,9 +268,7 @@ export default function Home() {
               <primitive object={lightTarget.current} />
         </group>
 
-        {/* CRITICAL FIX: Removed 'volumetric' and shadow casting.
-            This was the main cause of the mobile blackout.
-        */}
+        {/* SpotLight: Volumetric disabled everywhere, castShadow disabled on mobile */}
         <SpotLight
             position={[0, 15, 0]} 
             target={lightTarget.current} 
@@ -274,27 +278,37 @@ export default function Home() {
             intensity={isDark ? 100 : 300} 
             opacity={colors.rayOpacity} 
             color={colors.light} 
-            volumetric={false} // <--- SET TO FALSE to stop crashing
+            volumetric={false} 
+            castShadow={!isMobile} 
             debug={false}
         />
         
         <pointLight position={[0, 5, 10]} intensity={isDark ? 2 : 10} color="#ffffff" />
 
         <Suspense fallback={null}>
-          <Tree position={[0, -3, 0]} rotation={[0, 0.5, 0]} />
-          <FlowingRiver isDark={isDark} />
+          <Tree position={[0, -3, 0]} rotation={[0, 0.5, 0]} castShadow={!isMobile} receiveShadow={!isMobile}/>
+          
+          {/* Use the new Mobile-Aware River */}
+          <FlowingRiver isDark={isDark} isMobile={isMobile} />
           
           <WorksNodes isDark={isDark} setFocusedWork={setFocusedWork} />
 
-          <Sparkles count={100} scale={[10, 15, 10]} position={[0, 5, 0]} size={4} speed={0.4} opacity={0.6} color={colors.sparkles} />
+          {/* Reduce particles on mobile */}
+          <Sparkles count={isMobile ? 50 : 200} scale={[10, 15, 10]} position={[0, 5, 0]} size={4} speed={0.4} opacity={0.6} color={colors.sparkles} />
           <Environment preset={isDark ? "night" : "sunset"} blur={1} background={false} /> 
         </Suspense>
 
-        {/* @ts-ignore */}
-        <EffectComposer disableNormalPass multisampling={0}>
-          {/* @ts-ignore */}
-          <Bloom luminanceThreshold={isDark ? 0.5 : 0.9} mipmapBlur intensity={isDark ? 1.0 : 0.5} radius={0.5} />
-        </EffectComposer>
+        {/* CRITICAL PERFORMANCE FIX:
+           Only run EffectComposer (Bloom) on Desktop.
+           Mobile GPU cannot handle post-processing well.
+        */}
+        {!isMobile && (
+          // @ts-ignore
+          <EffectComposer disableNormalPass multisampling={0}>
+             {/* @ts-ignore */}
+            <Bloom luminanceThreshold={isDark ? 0.5 : 0.9} mipmapBlur intensity={isDark ? 1.0 : 0.5} radius={0.5} />
+          </EffectComposer>
+        )}
 
         <OrbitControls 
            makeDefault 
@@ -308,7 +322,6 @@ export default function Home() {
         />
       </Canvas>
 
-      {/* THIS IS THE LOADING SCREEN */}
       <Loader />
     </main>
   )
