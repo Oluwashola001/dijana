@@ -2,7 +2,7 @@
 
 import * as THREE from 'three'
 import { Canvas, useFrame, extend, useThree } from '@react-three/fiber'
-import { OrbitControls, Environment, Sparkles, SpotLight, Html, Text, PerspectiveCamera, Loader } from '@react-three/drei'
+import { OrbitControls, Environment, Sparkles, SpotLight, Html, Text, PerspectiveCamera, Loader, useTexture } from '@react-three/drei'
 import { EffectComposer, Bloom } from '@react-three/postprocessing' 
 import { Suspense, useRef, useMemo, useState, useEffect } from 'react'
 import { Model as Tree } from '../src/components/canvas/Tree'
@@ -61,7 +61,7 @@ const worksData = [
   },
 ]
 
-function CameraRig({ focusedWork }: { focusedWork: number | null }) {
+function CameraRig({ focusedWork, isMobile }: { focusedWork: number | null, isMobile: boolean }) {
   const { camera, controls } = useThree()
   
   useEffect(() => {
@@ -94,10 +94,13 @@ function CameraRig({ focusedWork }: { focusedWork: number | null }) {
         })
       }
     } else {
+      // RESET POSITION: 
+      // If Mobile, go further back (z: 12) so the tree fits.
+      // If Desktop, stay closer (z: 8.5).
       gsap.to(camera.position, {
         x: 0,
         y: 1.5,
-        z: 8.5,
+        z: isMobile ? 12.0 : 8.5, 
         duration: 1.5,
         ease: "power3.inOut"
       })
@@ -114,7 +117,7 @@ function CameraRig({ focusedWork }: { focusedWork: number | null }) {
           })
       }
     }
-  }, [focusedWork, camera, controls])
+  }, [focusedWork, camera, controls, isMobile])
 
   return null
 }
@@ -164,24 +167,37 @@ function WorksNodes({ isDark, setFocusedWork }: { isDark: boolean, setFocusedWor
   )
 }
 
-function FlowingRiver({ isDark, isMobile }: { isDark: boolean, isMobile: boolean }) {
+// --- NEW COMPONENT: Lightweight Flowing River for Mobile ---
+function MobileRiver({ isDark }: { isDark: boolean }) {
+  // Load texture
+  const texture = useTexture('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/waternormals.jpg')
+  
+  // Set texture to repeat endlessly
+  texture.wrapS = texture.wrapT = THREE.RepeatWrapping
+  texture.repeat.set(4, 4)
+
+  // Animate the texture offset to create "flow"
+  useFrame((state, delta) => {
+    texture.offset.y += delta * 0.2 // Moving the texture makes it look like flow
+  })
+
+  return (
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -3.1, 0]}>
+      <planeGeometry args={[100, 100]} />
+      <meshStandardMaterial 
+        color={isDark ? "#0a1a2a" : "#1a3a4a"} 
+        normalMap={texture}   // Use texture for bumps
+        normalScale={new THREE.Vector2(0.5, 0.5)}
+        roughness={0.1}       // Shiny
+        metalness={0.8}
+      />
+    </mesh>
+  )
+}
+
+function DesktopRiver({ isDark }: { isDark: boolean }) {
   const ref = useRef<any>(null)
   
-  // IF MOBILE: Return a simple flat plane (cheap) instead of Water shader (expensive)
-  if (isMobile) {
-    return (
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -3.1, 0]}>
-        <planeGeometry args={[100, 100]} />
-        <meshStandardMaterial 
-          color={isDark ? "#0a1a2a" : "#1a3a4a"} 
-          roughness={0.1} 
-          metalness={0.8}
-        />
-      </mesh>
-    )
-  }
-
-  // IF DESKTOP: Load full Water shader
   const waterNormals = useMemo(() => new THREE.TextureLoader().load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/waternormals.jpg', (texture) => {
     texture.wrapS = texture.wrapT = THREE.RepeatWrapping
   }), [])
@@ -213,10 +229,9 @@ export default function Home() {
   const [isDark, setIsDark] = useState(true)
   const [focusedWork, setFocusedWork] = useState<number | null>(null)
   
-  // --- DETECT MOBILE ---
   const [isMobile, setIsMobile] = useState(false)
+  
   useEffect(() => {
-    // Basic check: if screen width is less than 768px, it's mobile
     const checkMobile = () => setIsMobile(window.innerWidth < 768)
     checkMobile()
     window.addEventListener('resize', checkMobile)
@@ -246,18 +261,20 @@ export default function Home() {
 
       <Canvas 
         gl={{ 
-            antialias: !isMobile, // Disable AA on mobile for speed
+            // FIX 1: Turn Antialias ON (we saved enough memory elsewhere)
+            antialias: true, 
             powerPreference: "high-performance",
             stencil: false,
             depth: true 
         }} 
-        // Force pixel ratio to 1 on mobile (prevents overheating/crashing)
-        dpr={isMobile ? 1 : [1, 1.5]} 
-        shadows={!isMobile} // Disable shadows entirely on mobile
+        // FIX 2: Allow up to 1.5x resolution on mobile (crisper than 1x)
+        dpr={[1, 1.5]} 
+        shadows={!isMobile} 
       >
-        <PerspectiveCamera makeDefault position={[0, 1.5, 8.5]} fov={45} />
+        {/* FIX 3: Push camera back on mobile (z: 12) so tree fits */}
+        <PerspectiveCamera makeDefault position={[0, 1.5, isMobile ? 12 : 8.5]} fov={45} />
         
-        <CameraRig focusedWork={focusedWork} />
+        <CameraRig focusedWork={focusedWork} isMobile={isMobile} />
 
         <color attach="background" args={[colors.bg]} />
         <fog attach="fog" args={[colors.fog, 5, 30]} />
@@ -268,7 +285,6 @@ export default function Home() {
               <primitive object={lightTarget.current} />
         </group>
 
-        {/* SpotLight: Volumetric disabled everywhere, castShadow disabled on mobile */}
         <SpotLight
             position={[0, 15, 0]} 
             target={lightTarget.current} 
@@ -288,20 +304,15 @@ export default function Home() {
         <Suspense fallback={null}>
           <Tree position={[0, -3, 0]} rotation={[0, 0.5, 0]} castShadow={!isMobile} receiveShadow={!isMobile}/>
           
-          {/* Use the new Mobile-Aware River */}
-          <FlowingRiver isDark={isDark} isMobile={isMobile} />
+          {/* Use different water components for mobile vs desktop */}
+          {isMobile ? <MobileRiver isDark={isDark} /> : <DesktopRiver isDark={isDark} />}
           
           <WorksNodes isDark={isDark} setFocusedWork={setFocusedWork} />
 
-          {/* Reduce particles on mobile */}
           <Sparkles count={isMobile ? 50 : 200} scale={[10, 15, 10]} position={[0, 5, 0]} size={4} speed={0.4} opacity={0.6} color={colors.sparkles} />
           <Environment preset={isDark ? "night" : "sunset"} blur={1} background={false} /> 
         </Suspense>
 
-        {/* CRITICAL PERFORMANCE FIX:
-           Only run EffectComposer (Bloom) on Desktop.
-           Mobile GPU cannot handle post-processing well.
-        */}
         {!isMobile && (
           // @ts-ignore
           <EffectComposer disableNormalPass multisampling={0}>
