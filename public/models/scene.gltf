@@ -1,0 +1,724 @@
+{
+  "accessors": [
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 5186,
+      "max": [
+        2.4014668464660645,
+        5.274857044219971,
+        2.747300624847412
+      ],
+      "min": [
+        -2.156721353530884,
+        1.576051363372244e-05,
+        -2.657655715942383
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 62232,
+      "componentType": 5126,
+      "count": 5186,
+      "max": [
+        0.9987741708755493,
+        0.9993634223937988,
+        0.9999052286148071
+      ],
+      "min": [
+        -0.9986823201179504,
+        -0.9999999403953552,
+        -0.9936704635620117
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5126,
+      "count": 5186,
+      "max": [
+        0.9999158978462219,
+        0.999825119972229,
+        0.9998312592506409,
+        1.0
+      ],
+      "min": [
+        -0.9985477328300476,
+        -0.9998008012771606,
+        -1.0,
+        -1.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 5186,
+      "max": [
+        0.8605784773826599,
+        1.018949031829834
+      ],
+      "min": [
+        0.0704631358385086,
+        0.06383918225765228
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 6570,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 124464,
+      "componentType": 5126,
+      "count": 2256,
+      "max": [
+        4.92819881439209,
+        6.386727333068848,
+        6.481687545776367
+      ],
+      "min": [
+        -4.771896839141846,
+        -6.25581169128418,
+        -7.0335164070129395
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 151536,
+      "componentType": 5126,
+      "count": 2256,
+      "max": [
+        0.9964065551757813,
+        1.0,
+        0.9997696876525879
+      ],
+      "min": [
+        -0.9976291060447693,
+        -0.9968913793563843,
+        -0.9951131939888
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 41488,
+      "componentType": 5126,
+      "count": 2256,
+      "max": [
+        1.0015089511871338,
+        1.0
+      ],
+      "min": [
+        0.0,
+        0.0
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 26280,
+      "componentType": 5125,
+      "count": 3384,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 178608,
+      "componentType": 5126,
+      "count": 2256,
+      "max": [
+        4.227756500244141,
+        6.041358947753906,
+        5.440964698791504
+      ],
+      "min": [
+        -3.9768171310424805,
+        -5.615484714508057,
+        -6.244563102722168
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 205680,
+      "componentType": 5126,
+      "count": 2256,
+      "max": [
+        0.9995867609977722,
+        1.0,
+        0.9994370937347412
+      ],
+      "min": [
+        -0.9994993209838867,
+        -0.9956660270690918,
+        -0.987682580947876
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 59536,
+      "componentType": 5126,
+      "count": 2256,
+      "max": [
+        1.0015089511871338,
+        1.0
+      ],
+      "min": [
+        0.0,
+        0.0
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 39816,
+      "componentType": 5125,
+      "count": 3384,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 232752,
+      "componentType": 5126,
+      "count": 480,
+      "max": [
+        1.7644374370574951,
+        2.833001136779785,
+        5.242892265319824
+      ],
+      "min": [
+        -3.6769795417785645,
+        -3.2598776817321777,
+        -5.737336158752441
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 238512,
+      "componentType": 5126,
+      "count": 480,
+      "max": [
+        0.9943788647651672,
+        0.9360571503639221,
+        0.9606413245201111
+      ],
+      "min": [
+        -0.9995585680007935,
+        -0.9774682521820068,
+        -0.9962964057922363
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 77584,
+      "componentType": 5126,
+      "count": 480,
+      "max": [
+        1.0015089511871338,
+        1.0
+      ],
+      "min": [
+        0.0,
+        0.0
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 53352,
+      "componentType": 5125,
+      "count": 720,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 244272,
+      "componentType": 5126,
+      "count": 480,
+      "max": [
+        1.6861299276351929,
+        1.8713946342468262,
+        4.662207126617432
+      ],
+      "min": [
+        -3.175845146179199,
+        -3.0347821712493896,
+        -5.409749984741211
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 250032,
+      "componentType": 5126,
+      "count": 480,
+      "max": [
+        0.9916041493415833,
+        0.9952547550201416,
+        0.9543476700782776
+      ],
+      "min": [
+        -0.9996926784515381,
+        -0.917043149471283,
+        -0.9962964057922363
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 81424,
+      "componentType": 5126,
+      "count": 480,
+      "max": [
+        1.0015089511871338,
+        1.0
+      ],
+      "min": [
+        0.0,
+        0.0
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 56232,
+      "componentType": 5125,
+      "count": 720,
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "rhcreations (https://sketchfab.com/rhcreations)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/simple-elder-tree-e23a8be2d4b44df388d0b8c4b5a071ee",
+      "title": "Simple Elder Tree"
+    },
+    "generator": "Sketchfab-13.41.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 59112,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 85264,
+      "byteOffset": 59112,
+      "byteStride": 8,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 255792,
+      "byteOffset": 144376,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 82976,
+      "byteOffset": 400168,
+      "byteStride": 16,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 483144,
+      "uri": "scene.bin"
+    }
+  ],
+  "extensionsRequired": [
+    "KHR_materials_pbrSpecularGlossiness"
+  ],
+  "extensionsUsed": [
+    "KHR_materials_pbrSpecularGlossiness"
+  ],
+  "images": [
+    {
+      "uri": "textures/Elder_Tree_Texture_diffuse.png"
+    },
+    {
+      "uri": "textures/Elder_Tree_Texture_specularGlossiness.png"
+    },
+    {
+      "uri": "textures/Elder_Tree_Texture_normal.png"
+    },
+    {
+      "uri": "textures/Buddleia_Shrub_Material_diffuse.png"
+    },
+    {
+      "uri": "textures/Buddleia_Shrub_Stalks_Material.001_diffuse.png"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "extensions": {
+        "KHR_materials_pbrSpecularGlossiness": {
+          "diffuseFactor": [
+            0.3886770868922389,
+            0.3886770868922389,
+            0.3886770868922389,
+            1.0
+          ],
+          "diffuseTexture": {
+            "index": 0
+          },
+          "glossinessFactor": 1.0,
+          "specularFactor": [
+            0.7421394949463065,
+            0.7421394949463065,
+            0.7421394949463065
+          ],
+          "specularGlossinessTexture": {
+            "index": 1
+          }
+        }
+      },
+      "name": "Elder_Tree_Texture",
+      "normalTexture": {
+        "index": 2
+      }
+    },
+    {
+      "alphaMode": "BLEND",
+      "doubleSided": true,
+      "extensions": {
+        "KHR_materials_pbrSpecularGlossiness": {
+          "diffuseFactor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "diffuseTexture": {
+            "index": 3
+          },
+          "glossinessFactor": 1.0,
+          "specularFactor": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "name": "Buddleia_Shrub_Material"
+    },
+    {
+      "alphaMode": "BLEND",
+      "doubleSided": true,
+      "extensions": {
+        "KHR_materials_pbrSpecularGlossiness": {
+          "diffuseFactor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "diffuseTexture": {
+            "index": 3
+          },
+          "glossinessFactor": 1.0,
+          "specularFactor": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "name": "Buddleia_Shrub_Stalks_Material"
+    },
+    {
+      "alphaMode": "BLEND",
+      "doubleSided": true,
+      "extensions": {
+        "KHR_materials_pbrSpecularGlossiness": {
+          "diffuseFactor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "diffuseTexture": {
+            "index": 3
+          },
+          "glossinessFactor": 1.0,
+          "specularFactor": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "name": "Buddleia_Shrub_Material.001"
+    },
+    {
+      "alphaMode": "BLEND",
+      "doubleSided": true,
+      "extensions": {
+        "KHR_materials_pbrSpecularGlossiness": {
+          "diffuseFactor": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "diffuseTexture": {
+            "index": 4
+          },
+          "glossinessFactor": 1.0,
+          "specularFactor": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "name": "Buddleia_Shrub_Stalks_Material.001"
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Object_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TANGENT": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 4,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Object_1",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 6,
+            "POSITION": 5,
+            "TEXCOORD_0": 7
+          },
+          "indices": 8,
+          "material": 1,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Object_2",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 10,
+            "POSITION": 9,
+            "TEXCOORD_0": 11
+          },
+          "indices": 12,
+          "material": 2,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Object_3",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 14,
+            "POSITION": 13,
+            "TEXCOORD_0": 15
+          },
+          "indices": 16,
+          "material": 3,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Object_4",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 18,
+            "POSITION": 17,
+            "TEXCOORD_0": 19
+          },
+          "indices": 20,
+          "material": 4,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.220446049250313e-16,
+        -1.0,
+        0.0,
+        0.0,
+        1.0,
+        2.220446049250313e-16,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Sketchfab_model"
+    },
+    {
+      "children": [
+        2
+      ],
+      "name": "root"
+    },
+    {
+      "children": [
+        3
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.220446049250313e-16,
+        1.0,
+        0.0,
+        0.0,
+        -1.0,
+        2.220446049250313e-16,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "GLTF_SceneRootNode"
+    },
+    {
+      "children": [
+        4,
+        5
+      ],
+      "name": "Elder Tree_1"
+    },
+    {
+      "mesh": 0,
+      "name": "Object_4"
+    },
+    {
+      "children": [
+        6,
+        7,
+        8,
+        9
+      ],
+      "matrix": [
+        -0.15678569345789264,
+        0.36314907228590293,
+        -0.5112477220522085,
+        0.0,
+        -0.3072723708376747,
+        -0.26124246995403283,
+        -0.09133350986056994,
+        0.0,
+        -0.2578461715136651,
+        0.22079975060884055,
+        0.2359126705086331,
+        0.0,
+        0.11749394237995148,
+        3.4116644859313965,
+        -0.1607348918914795,
+        1.0
+      ],
+      "name": "Elder Tree Leaves.001_0"
+    },
+    {
+      "mesh": 1,
+      "name": "Object_6"
+    },
+    {
+      "mesh": 2,
+      "name": "Object_7"
+    },
+    {
+      "mesh": 3,
+      "name": "Object_8"
+    },
+    {
+      "mesh": 4,
+      "name": "Object_9"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Sketchfab_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 0,
+      "source": 1
+    },
+    {
+      "sampler": 0,
+      "source": 2
+    },
+    {
+      "sampler": 0,
+      "source": 3
+    },
+    {
+      "sampler": 0,
+      "source": 4
+    }
+  ]
+}
