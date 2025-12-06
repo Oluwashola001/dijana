@@ -2,7 +2,7 @@
 
 import * as THREE from 'three'
 import { Canvas, useFrame, extend, useThree } from '@react-three/fiber'
-import { OrbitControls, Environment, Sparkles, SpotLight, Html, Text, PerspectiveCamera } from '@react-three/drei'
+import { OrbitControls, Environment, Sparkles, SpotLight, Html, Text, PerspectiveCamera, Loader } from '@react-three/drei' // <--- ADDED LOADER
 import { EffectComposer, Bloom } from '@react-three/postprocessing' 
 import { Suspense, useRef, useMemo, useState, useEffect } from 'react'
 import { Model as Tree } from '../src/components/canvas/Tree'
@@ -13,13 +13,12 @@ import gsap from 'gsap'
 
 extend({ Water })
 
-// --- RESTORED: Original positions close to the tree ---
 const worksData = [
   { 
     id: 0,
     title: "Roots & Blossoms", 
     year: "2014", 
-    position: [0, -2.5, 0.8], // Close to tree
+    position: [0, -2.5, 0.8],
     image: "/works/fruit1.webp",
     link: "http://www.dijana-boskovic.com/en/disk.htm",
     description: "An extraordinary mixture of folk and classical music. How do a Sarabande of Johann Sebastian Bach and ancient Serbian-Macedonian folk songs come together? Arrangements by Dijana Bošković enhance time and space. Featuring: Dijana Bošković (flutes, bowls), Marina Djordjevic-Koch (alto flute), Georg Müller (bowls)." 
@@ -72,7 +71,6 @@ function CameraRig({ focusedWork, isDark }: { focusedWork: number | null, isDark
     if (focusedWork !== null) {
       const targetFruit = worksData[focusedWork]
       const fruitPos = new THREE.Vector3(...targetFruit.position as [number, number, number])
-      // Zoom offset: Stay 3 units away
       const offset = new THREE.Vector3(0, 0, 3.0) 
       const cameraTargetPos = fruitPos.clone().add(offset)
 
@@ -135,18 +133,15 @@ function WorksNodes({ isDark, setFocusedWork }: { isDark: boolean, setFocusedWor
       {worksData.map((work, index) => (
         <group key={index} position={new THREE.Vector3(...work.position as [number, number, number])}>
           
-          {/* TITLE LABEL - NOW CLICKABLE & SMALLER */}
           <Text
-            position={[0, 0.35, 0]} // Close to fruit
-            fontSize={0.15} // Small, elegant size
+            position={[0, 0.35, 0]} 
+            fontSize={0.15} 
             color={isDark ? "#bde0ff" : "#002244"} 
             outlineWidth={0.02}
             outlineColor={isDark ? "#000000" : "#ffffff"}
             anchorX="center"
             anchorY="middle"
             font="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff"
-            
-            // CLICK LOGIC ADDED HERE
             onClick={(e) => handleClick(e, index)}
             onPointerOver={() => { document.body.style.cursor = 'pointer'; setHovered(index) }} 
             onPointerOut={() => { document.body.style.cursor = 'auto'; setHovered(null) }}
@@ -154,13 +149,12 @@ function WorksNodes({ isDark, setFocusedWork }: { isDark: boolean, setFocusedWor
             {work.title}
           </Text>
 
-          {/* THE FRUIT SPHERE - ALSO CLICKABLE */}
           <mesh 
             onPointerOver={() => { document.body.style.cursor = 'pointer'; setHovered(index) }} 
             onPointerOut={() => { document.body.style.cursor = 'auto'; setHovered(null) }}
             onClick={(e) => handleClick(e, index)}
           >
-            <sphereGeometry args={[0.25, 32, 32]} /> {/* Moderate Size */}
+            <sphereGeometry args={[0.25, 32, 32]} />
             <meshStandardMaterial 
               color={isDark ? "#88ccff" : "#ffaa00"} 
               emissive={isDark ? "#88ccff" : "#ffaa00"}
@@ -169,7 +163,6 @@ function WorksNodes({ isDark, setFocusedWork }: { isDark: boolean, setFocusedWor
             />
           </mesh>
 
-          {/* HOVER YEAR LABEL */}
           <Html distanceFactor={10} center pointerEvents="none">
             <div 
               className={`
@@ -200,8 +193,8 @@ function FlowingRiver({ isDark }: { isDark: boolean }) {
 
   const geom = useMemo(() => new THREE.PlaneGeometry(100, 100), [])
   const config = useMemo(() => ({
-    textureWidth: 512,
-    textureHeight: 512,
+    textureWidth: 256, // <--- REDUCED FROM 512 for Performance
+    textureHeight: 256, // <--- REDUCED FROM 512 for Performance
     waterNormals: waterNormals,
     sunDirection: new THREE.Vector3(),
     sunColor: 0xffffff,
@@ -247,9 +240,14 @@ export default function Home() {
       />
 
       <Canvas 
-        gl={{ antialias: false }} 
-        dpr={[1, 1.5]} 
-        shadows 
+        gl={{ 
+            antialias: false, 
+            powerPreference: "high-performance",
+            stencil: false,
+            depth: true 
+        }} 
+        dpr={[1, 1.5]} // Caps quality at 1.5 to save mobile batteries
+        shadows={false} // <--- DISABLED SHADOWS FOR PERFORMANCE
       >
         <PerspectiveCamera makeDefault position={[0, 1.5, 8.5]} fov={45} />
         
@@ -261,9 +259,12 @@ export default function Home() {
         <ambientLight intensity={isDark ? 0.5 : 2.0} color={colors.ambient} /> 
         
         <group position={[0, -3, 0]}>
-             <primitive object={lightTarget.current} />
+              <primitive object={lightTarget.current} />
         </group>
 
+        {/* CRITICAL FIX: Removed 'volumetric' and shadow casting.
+            This was the main cause of the mobile blackout.
+        */}
         <SpotLight
             position={[0, 15, 0]} 
             target={lightTarget.current} 
@@ -273,27 +274,26 @@ export default function Home() {
             intensity={isDark ? 100 : 300} 
             opacity={colors.rayOpacity} 
             color={colors.light} 
-            castShadow
-            volumetric 
+            volumetric={false} // <--- SET TO FALSE to stop crashing
             debug={false}
         />
         
         <pointLight position={[0, 5, 10]} intensity={isDark ? 2 : 10} color="#ffffff" />
 
         <Suspense fallback={null}>
-          <Tree position={[0, -3, 0]} rotation={[0, 0.5, 0]} castShadow receiveShadow/>
+          <Tree position={[0, -3, 0]} rotation={[0, 0.5, 0]} />
           <FlowingRiver isDark={isDark} />
           
           <WorksNodes isDark={isDark} setFocusedWork={setFocusedWork} />
 
-          <Sparkles count={200} scale={[10, 15, 10]} position={[0, 5, 0]} size={4} speed={0.4} opacity={0.6} color={colors.sparkles} />
+          <Sparkles count={100} scale={[10, 15, 10]} position={[0, 5, 0]} size={4} speed={0.4} opacity={0.6} color={colors.sparkles} />
           <Environment preset={isDark ? "night" : "sunset"} blur={1} background={false} /> 
         </Suspense>
 
         {/* @ts-ignore */}
-        <EffectComposer disableNormalPass>
+        <EffectComposer disableNormalPass multisampling={0}>
           {/* @ts-ignore */}
-          <Bloom luminanceThreshold={isDark ? 0.5 : 0.9} mipmapBlur intensity={isDark ? 1.5 : 0.8} radius={0.5} />
+          <Bloom luminanceThreshold={isDark ? 0.5 : 0.9} mipmapBlur intensity={isDark ? 1.0 : 0.5} radius={0.5} />
         </EffectComposer>
 
         <OrbitControls 
@@ -307,6 +307,9 @@ export default function Home() {
            enabled={focusedWork === null}
         />
       </Canvas>
+
+      {/* THIS IS THE LOADING SCREEN */}
+      <Loader />
     </main>
   )
 }
