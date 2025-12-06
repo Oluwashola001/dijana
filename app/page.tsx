@@ -46,7 +46,7 @@ const worksData = [
     id: 3,
     title: "Inanna", 
     year: "2003", 
-    position: [-1.0, 1.8, 0.8], 
+    position: [-1.0, 1.6, 0.8], 
     image: "/works/fruit4.webp",
     link: "http://www.dijana-boskovic.com/en/disk.htm",
     description: "Listening cinema of the Sumerian census 'Inanna's Gang to the Underworld'. Text: Karoly Koller, Music: Helga Pogatschar. Featuring voices of Claudia Matussek, Bettina Koziol, Merit Ostermann. Flutes by Dijana Bošković." 
@@ -55,7 +55,7 @@ const worksData = [
     id: 4,
     title: "Encounters", 
     year: "2013", 
-    position: [0.2, 3.0, 0.5], 
+    position: [0.1, 2.6, 0.2], 
     image: "/works/fruit5.webp",
     link: "http://www.dijana-boskovic.com/en/disk.htm",
     description: "Chamber music. As flautist and artistic director of the Versus Vox Ensemble, Dijana Bošković presents her works. Classical and unusual instrumentations show a broad spectrum of musical ideas and sound combinations." 

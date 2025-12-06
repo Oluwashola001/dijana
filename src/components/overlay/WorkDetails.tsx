@@ -47,10 +47,10 @@ export function WorkDetails({ work, onClose, visible }: WorkDetailsProps) {
         <div className="absolute inset-0 bg-[#010101]/95"></div>
       </div>
 
-      {/* CLOSE BUTTON - Top Right - BRIGHT RED TO TEST */}
+      {/* CLOSE BUTTON - Top Right - Curved with White Border */}
       <button 
         onClick={onClose}
-        className="fixed top-8 right-8 z-[10000] px-8 py-4 rounded-2xl bg-red-500 border-2 border-red-300 text-white text-base font-bold tracking-wider shadow-2xl hover:bg-red-600 hover:scale-110 transition-all duration-300"
+        className="fixed top-8 right-8 z-[10000] px-10 py-5 rounded-full border-2 border-white bg-white/10 backdrop-blur-md text-white text-lg font-bold tracking-wider shadow-2xl hover:bg-white hover:text-black hover:scale-110 transition-all duration-300"
       >
         ✕ CLOSE
       </button>
@@ -83,7 +83,7 @@ export function WorkDetails({ work, onClose, visible }: WorkDetailsProps) {
             href={work.link} 
             target="_blank" 
             rel="noreferrer"
-            className="group relative px-14 py-5 rounded-full overflow-hidden bg-white text-black transition-transform duration-300 hover:scale-105 shadow-[0_0_40px_rgba(255,255,255,0.1)]"
+            className="group relative px-14 py-5 rounded-full overflow-hidden bg-white text-black transition-transform duration-300 hover:scale-105 shadow-[0_0_40px_rgba(255,255,255,0.1)] mb-12 md:mb-0"
           >
             <span className="relative z-10 font-bold text-xs tracking-[0.3em] uppercase">Listen Now</span>
             <div className="absolute inset-0 bg-amber-400 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-out"></div>
