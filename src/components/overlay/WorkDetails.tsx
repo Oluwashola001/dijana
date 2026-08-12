@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface WorkDetailsProps {
   work: {
@@ -13,84 +14,135 @@ interface WorkDetailsProps {
 }
 
 export function WorkDetails({ work, onClose, visible }: WorkDetailsProps) {
-  const [animate, setAnimate] = useState(false)
-
+  
+  // Lock the background canvas from scrolling when the modal is open
   useEffect(() => {
     if (visible) {
-      setTimeout(() => setAnimate(true), 10)
+      document.body.style.overflow = 'hidden'
     } else {
-      setAnimate(false)
+      document.body.style.overflow = ''
     }
+    return () => { document.body.style.overflow = '' }
   }, [visible])
 
-  if (!work) return null
-
   return (
-    <div 
-      className={`
-        fixed inset-0 z-[9999] w-screen h-screen overflow-y-auto
-        transition-all duration-700 ease-[0.22,1,0.36,1]
-        ${visible ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
-      `}
-    >
-      
-      {/* BACKGROUND IMAGE & OVERLAY */}
-      <div className="absolute inset-0 z-0">
-        <img 
-          src={work.image} 
-          alt="background" 
-          className={`
-            w-full h-full object-cover transition-transform duration-[2s] ease-out
-            ${animate ? 'scale-105 blur-md opacity-20' : 'scale-100 blur-none opacity-0'}
-          `}
-        />
-        <div className="absolute inset-0 bg-[#010101]/95"></div>
-      </div>
+    <AnimatePresence>
+      {visible && work && (
+        <div 
+          style={{ 
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, 
+            zIndex: 9999, overflowY: 'auto', padding: '16px' 
+          }}
+        >
+          {/* BACKDROP: Delayed by 0.5s on enter, closes instantly on exit */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ 
+              opacity: 1, 
+              transition: { duration: 0.8, delay: 0.5 } 
+            }}
+            exit={{ 
+              opacity: 0, 
+              transition: { duration: 0.3, delay: 0 } 
+            }}
+            style={{ 
+              position: 'fixed', inset: 0, backgroundColor: 'rgba(5, 5, 16, 0.85)', 
+              backdropFilter: 'blur(16px)', zIndex: 0 
+            }}
+            onClick={onClose}
+          />
 
-      {/* CLOSE BUTTON - Top Right - Curved with White Border */}
-      <button 
-        onClick={onClose}
-        className="fixed top-8 right-8 z-[10000] px-10 py-5 rounded-full border-2 border-white bg-white/10 backdrop-blur-md text-white text-lg font-bold tracking-wider shadow-2xl hover:bg-white hover:text-black hover:scale-110 transition-all duration-300"
-      >
-        ✕ CLOSE
-      </button>
+          {/* CENTERING WRAPPER */}
+          <div style={{ 
+            display: 'flex', minHeight: '100%', alignItems: 'center', 
+            justifyContent: 'center', position: 'relative', zIndex: 10, padding: '24px 0' 
+          }}>
+            
+            {/* MODAL CARD: Delayed by 1.0s to sync with GSAP camera landing */}
+            <motion.div
+              initial={{ opacity: 0, y: 40, scale: 0.95 }}
+              animate={{ 
+                opacity: 1, y: 0, scale: 1, 
+                transition: { duration: 0.6, delay: 1.0, ease: [0.22, 1, 0.36, 1] } 
+              }}
+              exit={{ 
+                opacity: 0, y: 20, scale: 0.95, 
+                transition: { duration: 0.3, delay: 0, ease: "easeIn" } 
+              }}
+              style={{ 
+                width: '100%', maxWidth: '1000px', backgroundColor: '#0a0a0a', 
+                borderRadius: '24px', overflow: 'hidden',
+                display: 'flex', flexWrap: 'wrap', 
+                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7)',
+                position: 'relative'
+              }}
+            >
+              {/* CLOSE BUTTON */}
+              <button
+                onClick={onClose}
+                style={{ 
+                  position: 'absolute', top: '16px', right: '16px', zIndex: 20, 
+                  width: '40px', height: '40px', borderRadius: '50%', 
+                  backgroundColor: 'rgba(0,0,0,0.7)', color: 'white', 
+                  border: '1px solid rgba(255,255,255,0.3)', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '18px'
+                }}
+              >
+                ✕
+              </button>
 
-      {/* CONTENT CONTAINER - PUSHED DOWN WITH MOBILE PADDING */}
-      <div className="relative z-10 w-full min-h-screen flex items-end justify-center pb-32 pt-40">
-        <div className={`
-          flex flex-col items-center text-center 
-          px-6 md:px-20 
-          py-20 md:py-0
-          max-w-4xl
-          transition-all duration-1000 delay-100 ease-out
-          ${animate ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}
-        `}>
-          
-          {/* Title */}
-          <h1 className="text-5xl md:text-7xl lg:text-9xl font-serif text-white mb-10 leading-[0.9] tracking-tight drop-shadow-2xl">
-            {work.title}
-          </h1>
+              {/* LEFT COLUMN: Image Area */}
+              <div style={{ 
+                flex: '1 1 350px', position: 'relative', minHeight: '350px', backgroundColor: '#000'
+              }}>
+                <img
+                  src={work.image}
+                  alt={work.title}
+                  style={{ 
+                    position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', 
+                    objectFit: 'cover', display: 'block' 
+                  }}
+                />
+              </div>
 
-          {/* Description */}
-          <div className="max-w-2xl mx-auto mb-16">
-            <p className="text-gray-300 text-lg md:text-xl leading-relaxed font-light tracking-wide">
-              {work.description}
-            </p>
+              {/* RIGHT COLUMN: Typography & Content */}
+              <div style={{ 
+                flex: '1 1 400px', padding: '40px 32px', display: 'flex', 
+                flexDirection: 'column', justifyContent: 'center' 
+              }}>
+                <span style={{ color: '#fbbf24', fontSize: '13px', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '16px', display: 'block', fontWeight: 600 }}>
+                  {work.year}
+                </span>
+                
+                <h2 style={{ color: 'white', fontSize: '2.5rem', marginBottom: '24px', lineHeight: '1.1', fontFamily: 'serif' }}>
+                  {work.title}
+                </h2>
+                
+                <p style={{ color: '#9ca3af', lineHeight: '1.7', marginBottom: '40px', fontSize: '1.05rem', fontWeight: 300 }}>
+                  {work.description}
+                </p>
+                
+                <div>
+                  <a
+                    href={work.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{ 
+                      display: 'inline-block', backgroundColor: 'white', color: 'black', 
+                      padding: '16px 36px', borderRadius: '9999px', textDecoration: 'none', 
+                      fontWeight: 'bold', fontSize: '12px', letterSpacing: '0.2em', 
+                      textTransform: 'uppercase' 
+                    }}
+                  >
+                    Listen Now
+                  </a>
+                </div>
+              </div>
+            </motion.div>
           </div>
-
-          {/* Action Button */}
-          <a 
-            href={work.link} 
-            target="_blank" 
-            rel="noreferrer"
-            className="group relative px-14 py-5 rounded-full overflow-hidden bg-white text-black transition-transform duration-300 hover:scale-105 shadow-[0_0_40px_rgba(255,255,255,0.1)] mb-12 md:mb-0"
-          >
-            <span className="relative z-10 font-bold text-xs tracking-[0.3em] uppercase">Listen Now</span>
-            <div className="absolute inset-0 bg-amber-400 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-out"></div>
-          </a>
-
         </div>
-      </div>
-    </div>
+      )}
+    </AnimatePresence>
   )
 }
