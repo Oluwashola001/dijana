@@ -20,7 +20,7 @@ const worksData = [
     year: "2014", 
     position: [0, -2.5, 0.8],
     image: "/works/fruit1.webp",
-    link: "http://www.dijana-boskovic.com/en/disk.htm",
+    link: "http://www.dijana-boskovic.com/en/compositions/works",
     description: "An extraordinary mixture of folk and classical music. How do a Sarabande of Johann Sebastian Bach and ancient Serbian-Macedonian folk songs come together? Arrangements by Dijana Bošković enhance time and space. Featuring: Dijana Bošković (flutes, bowls), Marina Djordjevic-Koch (alto flute), Georg Müller (bowls)." 
   },
   { 
@@ -29,7 +29,7 @@ const worksData = [
     year: "2005", 
     position: [-1.2, -0.5, 1.0], 
     image: "/works/fruit2.webp",
-    link: "http://www.dijana-boskovic.com/en/disk.htm",
+    link: "http://www.dijana-boskovic.com/compositions/works",
     description: "Modern jazz with nice arrangement and sounds. 'I heard Dijana Bošković at a classical concert in the Gasteig in 1999... We did one rehearsal, and then went into the studio three weeks later.' Featuring Paulo Cardoso (bass/vocal), Dijana Bošković (flute), and full band." 
   },
   { 
@@ -38,7 +38,7 @@ const worksData = [
     year: "2010", 
     position: [1.5, 0.5, 0.5], 
     image: "/works/fruit3.webp",
-    link: "http://www.dijana-boskovic.com/en/disk.htm",
+    link: "http://www.dijana-boskovic.com/compositions/works",
     description: "Mini opera for children. What can Gil Gama's mouse do against mythological creatures such as the sphinx lion or the Minotaur? A whole lot of! Author: Rudolf Herfurtner, Music: Helga Pogachar, Musical direction: Dijana Bošković." 
   },
   { 
@@ -47,7 +47,7 @@ const worksData = [
     year: "2003", 
     position: [-1.0, 1.6, 0.8], 
     image: "/works/fruit4.webp",
-    link: "http://www.dijana-boskovic.com/en/disk.htm",
+    link: "http://www.dijana-boskovic.com/compositions/works",
     description: "Listening cinema of the Sumerian census 'Inanna's Gang to the Underworld'. Text: Karoly Koller, Music: Helga Pogatschar. Featuring voices of Claudia Matussek, Bettina Koziol, Merit Ostermann. Flutes by Dijana Bošković." 
   },
   { 
@@ -56,7 +56,7 @@ const worksData = [
     year: "2013", 
     position: [0.1, 2.6, 0.2], 
     image: "/works/fruit5.webp",
-    link: "http://www.dijana-boskovic.com/en/disk.htm",
+    link: "http://www.dijana-boskovic.com/compositions/works",
     description: "Chamber music. As flautist and artistic director of the Versus Vox Ensemble, Dijana Bošković presents her works. Classical and unusual instrumentations show a broad spectrum of musical ideas and sound combinations." 
   },
 ]
