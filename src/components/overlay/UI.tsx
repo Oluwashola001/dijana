@@ -7,7 +7,16 @@ interface UIProps {
 
 export function UI({ isDark, setIsDark }: UIProps) {
   const [isMuted, setIsMuted] = useState(true)
+  const [isMobile, setIsMobile] = useState(false)
   const audioRef = useRef<HTMLAudioElement>(null)
+
+  // Detect if the screen is mobile sized
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   // Start playing the muted audio as soon as the component loads
   useEffect(() => {
@@ -27,19 +36,19 @@ export function UI({ isDark, setIsDark }: UIProps) {
     }
   }
 
-  // A reusable premium glassmorphism style for both buttons
+  // Dynamic glassmorphism style based on screen size
   const buttonStyle: React.CSSProperties = {
-    width: '60px',
-    height: '60px',
+    width: isMobile ? '45px' : '60px',      // Smaller on mobile
+    height: isMobile ? '45px' : '60px',     // Smaller on mobile
     borderRadius: '50%',
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     backdropFilter: 'blur(12px)',
-    WebkitBackdropFilter: 'blur(12px)', // For Safari support
+    WebkitBackdropFilter: 'blur(12px)', 
     border: '1px solid rgba(255, 255, 255, 0.2)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: '28px',
+    fontSize: isMobile ? '20px' : '28px',   // Smaller icon on mobile
     cursor: 'pointer',
     color: 'white',
     boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
@@ -51,15 +60,15 @@ export function UI({ isDark, setIsDark }: UIProps) {
       {/* Hidden Audio Player */}
       <audio ref={audioRef} src="/music.mp3" loop muted={isMuted} />
 
-      {/* Fixed Controls Container on the Top Right */}
+      {/* Fixed Controls Container */}
       <div style={{
         position: 'fixed',
-        top: '30px',
-        right: '30px',
+        top: isMobile ? '20px' : '30px',    // Slightly tighter to the top edge on mobile
+        right: isMobile ? '20px' : '30px',  // Slightly tighter to the right edge on mobile
         zIndex: 999,
         display: 'flex',
-        flexDirection: 'column',
-        gap: '16px'
+        flexDirection: isMobile ? 'row' : 'column', // Side-by-side on mobile, stacked on desktop
+        gap: isMobile ? '12px' : '16px'             // Tighter spacing on mobile
       }}>
         
         {/* Day/Night Theme Toggle */}
