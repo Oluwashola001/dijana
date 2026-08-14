@@ -11,10 +11,26 @@ interface WorkDetailsProps {
   } | null
   onClose: () => void
   visible: boolean
+  isDark: boolean // Added the new prop here
 }
 
-export function WorkDetails({ work, onClose, visible }: WorkDetailsProps) {
-  
+export function WorkDetails({ work, onClose, visible, isDark }: WorkDetailsProps) {
+
+  // Dynamic theme colors based on isDark state
+  const theme = {
+    backdrop: isDark ? 'rgba(5, 5, 16, 0.85)' : 'rgba(255, 255, 255, 0.85)',
+    cardBg: isDark ? '#0a0a0a' : '#ffffff',
+    title: isDark ? 'white' : '#002244',
+    text: isDark ? '#9ca3af' : '#4b5563', // gray-400 vs gray-600
+    year: isDark ? '#fbbf24' : '#d97706', // amber-400 vs amber-600
+    btnBg: isDark ? 'white' : '#002244',
+    btnText: isDark ? 'black' : 'white',
+    closeBg: isDark ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.9)',
+    closeColor: isDark ? 'white' : '#002244',
+    closeBorder: isDark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.1)',
+    shadow: isDark ? '0 25px 50px -12px rgba(0, 0, 0, 0.7)' : '0 25px 50px -12px rgba(0, 34, 68, 0.15)',
+  }
+
   // Lock the background canvas from scrolling when the modal is open
   useEffect(() => {
     if (visible) {
@@ -34,7 +50,7 @@ export function WorkDetails({ work, onClose, visible }: WorkDetailsProps) {
             zIndex: 9999, overflowY: 'auto', padding: '16px' 
           }}
         >
-          {/* BACKDROP: Delayed by 0.5s on enter, closes instantly on exit */}
+          {/* BACKDROP */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ 
@@ -46,8 +62,9 @@ export function WorkDetails({ work, onClose, visible }: WorkDetailsProps) {
               transition: { duration: 0.3, delay: 0 } 
             }}
             style={{ 
-              position: 'fixed', inset: 0, backgroundColor: 'rgba(5, 5, 16, 0.85)', 
-              backdropFilter: 'blur(16px)', zIndex: 0 
+              position: 'fixed', inset: 0, backgroundColor: theme.backdrop, 
+              backdropFilter: 'blur(16px)', zIndex: 0,
+              transition: 'background-color 0.5s ease'
             }}
             onClick={onClose}
           />
@@ -57,8 +74,8 @@ export function WorkDetails({ work, onClose, visible }: WorkDetailsProps) {
             display: 'flex', minHeight: '100%', alignItems: 'center', 
             justifyContent: 'center', position: 'relative', zIndex: 10, padding: '24px 0' 
           }}>
-            
-            {/* MODAL CARD: Delayed by 1.0s to sync with GSAP camera landing */}
+
+            {/* MODAL CARD */}
             <motion.div
               initial={{ opacity: 0, y: 40, scale: 0.95 }}
               animate={{ 
@@ -70,11 +87,12 @@ export function WorkDetails({ work, onClose, visible }: WorkDetailsProps) {
                 transition: { duration: 0.3, delay: 0, ease: "easeIn" } 
               }}
               style={{ 
-                width: '100%', maxWidth: '1000px', backgroundColor: '#0a0a0a', 
+                width: '100%', maxWidth: '1000px', backgroundColor: theme.cardBg, 
                 borderRadius: '24px', overflow: 'hidden',
                 display: 'flex', flexWrap: 'wrap', 
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7)',
-                position: 'relative'
+                boxShadow: theme.shadow,
+                position: 'relative',
+                transition: 'background-color 0.5s ease, box-shadow 0.5s ease'
               }}
             >
               {/* CLOSE BUTTON */}
@@ -83,10 +101,11 @@ export function WorkDetails({ work, onClose, visible }: WorkDetailsProps) {
                 style={{ 
                   position: 'absolute', top: '16px', right: '16px', zIndex: 20, 
                   width: '40px', height: '40px', borderRadius: '50%', 
-                  backgroundColor: 'rgba(0,0,0,0.7)', color: 'white', 
-                  border: '1px solid rgba(255,255,255,0.3)', cursor: 'pointer',
+                  backgroundColor: theme.closeBg, color: theme.closeColor, 
+                  border: `1px solid ${theme.closeBorder}`, cursor: 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '18px'
+                  fontSize: '18px',
+                  transition: 'all 0.3s ease'
                 }}
               >
                 ✕
@@ -111,28 +130,38 @@ export function WorkDetails({ work, onClose, visible }: WorkDetailsProps) {
                 flex: '1 1 400px', padding: '40px 32px', display: 'flex', 
                 flexDirection: 'column', justifyContent: 'center' 
               }}>
-                <span style={{ color: '#fbbf24', fontSize: '13px', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '16px', display: 'block', fontWeight: 600 }}>
+                <span style={{ 
+                  color: theme.year, fontSize: '13px', letterSpacing: '0.2em', 
+                  textTransform: 'uppercase', marginBottom: '16px', display: 'block', 
+                  fontWeight: 600, transition: 'color 0.5s ease' 
+                }}>
                   {work.year}
                 </span>
-                
-                <h2 style={{ color: 'white', fontSize: '2.5rem', marginBottom: '24px', lineHeight: '1.1', fontFamily: 'serif' }}>
+
+                <h2 style={{ 
+                  color: theme.title, fontSize: '2.5rem', marginBottom: '24px', 
+                  lineHeight: '1.1', fontFamily: 'serif', transition: 'color 0.5s ease' 
+                }}>
                   {work.title}
                 </h2>
-                
-                <p style={{ color: '#9ca3af', lineHeight: '1.7', marginBottom: '40px', fontSize: '1.05rem', fontWeight: 300 }}>
+
+                <p style={{ 
+                  color: theme.text, lineHeight: '1.7', marginBottom: '40px', 
+                  fontSize: '1.05rem', fontWeight: 300, transition: 'color 0.5s ease' 
+                }}>
                   {work.description}
                 </p>
-                
+
                 <div>
                   <a
                     href={work.link}
                     target="_blank"
                     rel="noreferrer"
                     style={{ 
-                      display: 'inline-block', backgroundColor: 'white', color: 'black', 
+                      display: 'inline-block', backgroundColor: theme.btnBg, color: theme.btnText, 
                       padding: '16px 36px', borderRadius: '9999px', textDecoration: 'none', 
                       fontWeight: 'bold', fontSize: '12px', letterSpacing: '0.2em', 
-                      textTransform: 'uppercase' 
+                      textTransform: 'uppercase', transition: 'all 0.5s ease' 
                     }}
                   >
                     Listen Now

@@ -252,6 +252,7 @@ export default function Home() {
         work={focusedWork !== null ? worksData[focusedWork] : null} 
         visible={focusedWork !== null}
         onClose={() => setFocusedWork(null)} 
+        isDark={isDark}
       />
 
       <Canvas 
